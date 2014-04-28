@@ -2,7 +2,7 @@ package ps3.graph;
 
 /**
  * A WeightedNode class is a simple record type which contains a name
- * and a cost 
+ * and a cost
  **/
 
 public class WeightedNode implements Comparable<WeightedNode> {
@@ -20,7 +20,7 @@ public class WeightedNode implements Comparable<WeightedNode> {
         this.name = name;
         this.cost = cost;
     }
-  
+
     /**
      * @return this.name
      **/
@@ -43,7 +43,7 @@ public class WeightedNode implements Comparable<WeightedNode> {
         }
         return false;
     }
-  
+
     // Specified by the Object superclass
     public int hashCode() {
         return name.hashCode();
@@ -67,5 +67,5 @@ public class WeightedNode implements Comparable<WeightedNode> {
             return c;
         }
     }
-    
+
 }

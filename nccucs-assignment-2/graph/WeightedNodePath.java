@@ -7,22 +7,22 @@ import java.util.*;
  * for a path is the sum of the costs of the WeightedNodes it contains.<p>
  *
  * A WeightedNodePath is immutable. A new WeightedNodePath is returned through
- * the extend path operation. <p> 
+ * the extend path operation. <p>
  *
  * Specfields inherited from Path:
  *
  * @specfield  cost :     double       // cost of traversing this path.
  * @specfield  elements : sequence     // sequence of nodes in this path.
- * 
+ *
  **/
 
 public class WeightedNodePath implements Path<WeightedNode> {
 
     // The representation invariant describes what invariants hold for
-    // the concrete representation. 
-    // 
+    // the concrete representation.
+    //
     // RepInvariant:
-    //  RI(c) = 
+    //  RI(c) =
     //   (c.node != null) &&
     //   (c.path == null) ==> (c.cost == c.node.cost) &&
     //   (c.path != null) ==> (c.cost == c.node.cost + c.path.cost)
@@ -32,12 +32,12 @@ public class WeightedNodePath implements Path<WeightedNode> {
     // Abstraction Function:
     //
     //  The abstract state is given in terms of the specfields of the
-    //  Path interface, namely the cost and elements of a path. 
+    //  Path interface, namely the cost and elements of a path.
     //
     //  The AF uses two helper functions, which map a concrete state
     //  'c' to the abstract state.
     //
-    //  AF(c) = < wnpcost(c), wnpelms(c) > 
+    //  AF(c) = < wnpcost(c), wnpelms(c) >
     //  (Maps c to wnp cost and wnp elements abstract fields recursively)
     //
     //    wnpcost(c) = c.cost
@@ -46,13 +46,13 @@ public class WeightedNodePath implements Path<WeightedNode> {
     //
     //  (Note that [c.node] appears at the *end* not the *start* of the
     //   path sequence.)
-    //  
+    //
     //  To make the AF(c) clearer, we could also write the following:
     //  AF(c) = < cost, elements >  where
     //   cost     = c.cost
-    //   elements = [c.node]                     if c.path == null 
+    //   elements = [c.node]                     if c.path == null
     //              [c.node] + c.path.elements   if c.path != null
-    //  
+    //
 
     /** The WeightedNode at the end of the path. */
     private final WeightedNode node;
@@ -61,11 +61,11 @@ public class WeightedNodePath implements Path<WeightedNode> {
     private final WeightedNodePath path;
     /** The cost of this WeightedNodePath. */
     private final int cost;
-  
+
 
     /**
      * Constructs a WeightedNodePath containing one node.
-     * 
+     *
      * @requires node != null
      * @effects Creates a new WeightedNodePath which originates at
      * <code>node</code>.
@@ -115,7 +115,7 @@ public class WeightedNodePath implements Path<WeightedNode> {
     }
 
     /**
-     * @return a string representation of this. 
+     * @return a string representation of this.
      **/
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -146,12 +146,12 @@ public class WeightedNodePath implements Path<WeightedNode> {
      **/
     public boolean equals(WeightedNodePath wnp) {
         return (wnp != null) &&
-            this.node.equals(wnp.node) && 
+            this.node.equals(wnp.node) &&
             (this.path == null ? wnp.path==null : this.path.equals(wnp.path));
     }
 
     /**
-     * @return a valid hashcode for this. 
+     * @return a valid hashcode for this.
      **/
     public int hashCode() {
         return node.hashCode() + (this.path==null ? 0 : 13 * path.hashCode());
@@ -169,7 +169,7 @@ public class WeightedNodePath implements Path<WeightedNode> {
     public int compareTo(Path<?> p){
         return Double.compare(this.cost(), p.cost());
     }
-    
+
     /**
      * Return the end of this path
      */
