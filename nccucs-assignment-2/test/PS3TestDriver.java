@@ -17,17 +17,17 @@ public class PS3TestDriver {
                 printUsage();
                 return;
             }
-      
+
             PS3TestDriver td;
-      
+
             if (args.length == 0) {
                 td = new PS3TestDriver(new InputStreamReader(System.in),
                                        new OutputStreamWriter(System.out));
             } else {
-  
+
                 String fileName = args[0];
                 File tests = new File (fileName);
-  
+
                 if (tests.exists() || tests.canRead()) {
                     td = new PS3TestDriver(new FileReader(tests),
                                            new OutputStreamWriter(System.out));
@@ -87,12 +87,12 @@ public class PS3TestDriver {
                 output.println(inputLine);
                 continue;
             }
-        
+
             // separate the input line on white space
             StringTokenizer st = new StringTokenizer(inputLine);
             if (st.hasMoreTokens()) {
                 String command = st.nextToken();
-          
+
                 List<String> arguments = new ArrayList<String>();
                 while (st.hasMoreTokens()) {
                     arguments.add(st.nextToken());
@@ -100,7 +100,7 @@ public class PS3TestDriver {
 
                 executeCommand(command, arguments);
             }
-        
+
         }
         output.flush();
     }
@@ -149,7 +149,7 @@ public class PS3TestDriver {
         if (arguments.size() != 2) {
             throw new CommandException("Bad arguments to createNode: " + arguments);
         }
-      
+
         String nodeName = arguments.get(0);
         String cost = arguments.get(1);
 
@@ -167,13 +167,13 @@ public class PS3TestDriver {
         if (arguments.size() != 2) {
             throw new CommandException("Bad arguments to addNode: " + arguments);
         }
-    
+
         String graphName = arguments.get(0);
         String nodeName = arguments.get(1);
 
         addNode(graphName, nodeName);
     }
-  
+
     private void addNode(String graphName, String nodeName) {
         // Insert your code here.
 
@@ -186,7 +186,7 @@ public class PS3TestDriver {
         if (arguments.size() != 3) {
             throw new CommandException("Bad arguments to addEdge: " + arguments);
         }
-    
+
         String graphName = arguments.get(0);
         String parentName = arguments.get(1);
         String childName = arguments.get(2);
@@ -208,7 +208,7 @@ public class PS3TestDriver {
         if (arguments.size() != 1) {
             throw new CommandException("Bad arguments to listNodes: " + arguments);
         }
-    
+
         String graphName = arguments.get(0);
         listNodes(graphName);
     }
@@ -224,12 +224,12 @@ public class PS3TestDriver {
         if (arguments.size() != 2) {
             throw new CommandException("Bad arguments to listChildren: " + arguments);
         }
-    
+
         String graphName = arguments.get(0);
         String parentName = arguments.get(1);
         listChildren(graphName, parentName);
     }
-    
+
     private void listChildren(String graphName, String parentName) {
         // Insert your code here.
 
@@ -246,7 +246,7 @@ public class PS3TestDriver {
         if (arguments.size() < 1) {
             throw new CommandException("Bad arguments to FindPath: " + arguments);
         }
-    
+
         Iterator<String> iter = arguments.iterator();
 
         graphName = iter.next();
@@ -289,14 +289,14 @@ public class PS3TestDriver {
      * This exception results when the input file cannot be parsed properly
      **/
     static class CommandException extends RuntimeException {
-  
+
         public CommandException() {
             super();
         }
         public CommandException(String s) {
             super(s);
         }
-        
+
         public static final long serialVersionUID = 3495;
     }
 }

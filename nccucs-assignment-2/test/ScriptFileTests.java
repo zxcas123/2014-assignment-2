@@ -23,14 +23,14 @@ import junit.framework.TestSuite;
  */
 public class ScriptFileTests extends TestCase {
         private final File testDriver;
-        
+
         /**
          * Creates a new ScriptFileTests case, which runs the given test file.
          * @param testDriver
          */
     public ScriptFileTests(File testDriver) {
         super("testWithScriptFile");
-        
+
         this.testDriver = testDriver;
     }
 
@@ -43,7 +43,7 @@ public class ScriptFileTests extends TestCase {
         if (f == null) {
             throw new RuntimeException("No file specified");
         }
-        
+
         BufferedReader input = new BufferedReader(new FileReader(f));
                   String inputLine;
                   StringBuffer result = new StringBuffer();
@@ -56,30 +56,30 @@ public class ScriptFileTests extends TestCase {
     }
 
     /**
-     * @throws IOException 
+     * @throws IOException
      * @requires there exists a test file indicated by testDriver
      *
      * @effects runs the test in filename, and output its results to a file in
      * the same directory with name filename+".actual"; if that file already
-     * exists, it will be overwritten.     
+     * exists, it will be overwritten.
      * @returns the contents of the output file
      */
     protected String runScriptFile() throws IOException {
         if (testDriver == null) {
             throw new RuntimeException("No file specified");
         }
-        
+
         File actual = fileWithSuffix("actual");
-        
+
         Reader r = new FileReader(testDriver);
         Writer w = new FileWriter(actual);
-        
+
         PS3TestDriver td = new PS3TestDriver(r, w);
         td.runTests();
-        
+
         return fileContents(actual);
     }
-    
+
     /**
          * @param newSuffix
          * @return a File with the same name as testDriver, except that the test
@@ -89,29 +89,29 @@ public class ScriptFileTests extends TestCase {
         File parent = testDriver.getParentFile();
         String driverName = testDriver.getName();
         String baseName = driverName.substring(0, driverName.length() - "test".length());
-        
+
         return new File(parent, baseName + newSuffix);
     }
-    
+
     /**
      * The only test that is run: run a script file and test its output.
      * @throws IOException
      */
     public void testWithScriptFile() throws IOException {
         File expected = fileWithSuffix("expected");
-        
+
         assertEquals(testDriver.getName(), fileContents(expected), runScriptFile());
     }
-    
+
     /**
      * Build a test suite of all of the script files in the directory.
      * @return the test suite
      * @throws URISyntaxException
      */
     public static Test suite()
-    { 
-        TestSuite suite = new TestSuite(); 
-        
+    {
+        TestSuite suite = new TestSuite();
+
         // Hack to get at the directory where the files are: they are in the
                 // same directory as the compiled ScriptFileTests class,
         try {
@@ -126,5 +126,5 @@ public class ScriptFileTests extends TestCase {
             throw new RuntimeException(e);
         }
     }
-    
+
 }
