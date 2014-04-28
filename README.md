@@ -4,7 +4,7 @@
    * http://nccucs-se.github.io/2014-assignment-2
  1. 將檔案 `fork` 到自己的 github 帳號
  
- 1. 將檔案 clone 到本機
+ 1. 將檔案 `clone` 到本機
  
  1. 寫程式
  
