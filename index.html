@@ -1,0 +1,1311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+   <title>CSE 331 Problem Set 3: Graph ADT with PathFinder</title>
+   <link rel="StyleSheet" href="stylesheet.css" />
+</head>
+<body>
+<div id="header">
+<div class="course">CSE 331 Software Design and Implementation</div>
+<h1><!-- omit from toc -->
+<span class="head">Problem Set 3:</span>
+<span class="title">Graph ADT with PathFinder</span>
+</h1>
+<h2><!-- omit from toc -->
+<span class="head">Due:</span>
+<span class="due">Friday, January 28, 2011 at 8:00pm</span>
+</h2>
+</div>
+
+<h3>Handout P3</h3> <!-- omit from toc -->
+
+<p>Contents:</p>
+  <!-- start toc.  do not edit; run html-update-toc instead -->
+    <ul>
+      <li><a href="#Purpose">Purpose</a></li>
+      <li><a href="#Getting-Started">Getting Started</a></li>
+      <li><a href="#Introduction">Introduction</a></li>
+      <li><a href="#Graphs">Graphs</a>
+        <ul>
+          <li><a href="#nodes-represent-streets">Nodes represent streets</a></li>
+        </ul></li>
+      <li><a href="#Part-1-Graph-ADT">Part 1: Graph ADT</a>
+        <ul>
+          <li><a href="#Problem1">Problem 1: Determine Requirements for Graph [3 points]</a></li>
+          <li><a href="#Problem2">Problem 2: Write a Specification for Graph [12 points]</a></li>
+          <li><a href="#Problem3">Problem 3: Write Tests for Graph [10 points]</a></li>
+          <li><a href="#Problem4">Problem 4: Implement Graph [15 points]</a></li>
+          <li><a href="#Problem5">Problem 5: Write a Test Driver for Graph [4 points]</a></li>
+        </ul></li>
+      <li><a href="#Path">Path</a></li>
+      <li><a href="#Finding-Shortest-Paths">Finding Shortest Paths</a>
+        <ul>
+          <li><a href="#Explanation-of-the-algorithm">Explanation of the algorithm</a></li>
+          <li><a href="#Shortest-path-example">Shortest path example</a></li>
+        </ul></li>
+      <li><a href="#Part-2-PathFinder">Part 2: PathFinder</a>
+        <ul>
+          <li><a href="#Problem6">Problem 6: Understanding the Shortest Path Algorithm [4 points]</a></li>
+          <li><a href="#Problem7">Problem 7: Write Tests for Shortest Path Algorithm [10 points]</a></li>
+          <li><a href="#Problem8">Problem 8: Implement Shortest Path Algorithm [14 points]</a></li>
+          <li><a href="#Problem9">Problem 9: WeightedNodePath Representation [3 points]</a></li>
+          <li><a href="#Tools">Problem 10: Tools [2 points]</a></li>
+          <li><a href="#reflection">Reflection [1 point]</a></li>
+          <li><a href="#collaboration">Collaboration [1 point]</a></li>
+        </ul></li>
+      <li><a href="#Returnin">Returnin [25 points]</a></li>
+      <li><a href="#TestScriptFileFormat">Test script file format</a>
+        <ul>
+          <li><a href="#SampleTest">Sample input and output</a></li>
+        </ul></li>
+      <li><a href="#Hints">Hints</a>
+        <ul>
+          <li><a href="#WritingSpecs">Writing Specifications</a></li>
+          <li><a href="#Working_Incrementally">Working Incrementally</a></li>
+          <li><a href="#Designing_Tests">Designing Tests</a></li>
+        </ul></li>
+      <li><a href="#q-and-a">Q &amp; A</a></li>
+    </ul>
+<!-- end toc -->
+
+<p>We recommend that you read the entire problem set before you begin work.</p>
+
+<h2><a name="Purpose">Purpose</a></h2>
+
+<p>This assignment gives you the opportunity to design your own specifications
+for an abstract data type (ADT).  You will have the chance to implement
+your specification and write tests for the implementation. You will also
+implement and test an algorithm that uses your ADT. Your solution
+needs not, and should not, depend on any of the previous problem
+sets.</p>
+
+<h2><a name="Getting-Started">Getting Started</a></h2>
+
+<p>Update your checkout directory of your repository where your homework is. If you don't
+remember how to do this, take a look at the
+<a href="../../tools/versioncontrol.html">Version Control</a>
+document. Then, work through the problems below.</p>
+
+<p>We have provided the following files:</p>
+<ul>
+  <li><a class="src" href="ps3/graph/Path.html">ps3/graph/Path.java</a></li>
+  <li><a class="src" href="ps3/graph/WeightedNode.html">ps3/graph/WeightedNode.java</a></li>
+  <li><a class="src" href="ps3/graph/WeightedNodePath.html">ps3/graph/WeightedNodePath.java</a></li>
+  <li><a class="src" href="ps3/graph/NodeCountingPath.html">ps3/graph/NodeCountingPath.java</a></li>
+  <li>ps3/test/example1.expected</li>
+  <li>ps3/test/example1.test</li>
+  <li>ps3/test/example2.expected</li>
+  <li>ps3/test/example2.test</li>
+  <li><a class="src" href="ps3/test/ImplementationTests.html">ps3/test/ImplementationTests.java</a></li>
+  <li><a class="src" href="ps3/test/PS3TestDriver.html">ps3/test/PS3TestDriver.java</a></li>
+  <li><a class="src" href="ps3/test/ScriptFileTests.html">ps3/test/ScriptFileTests.java</a></li>
+  <li><a class="src" href="ps3/test/SpecificationTests.html">ps3/test/SpecificationTests.java</a></li>
+</ul>
+<p>When you are done with this problem set, you should have committed the following additional files to SVN:</p>
+<ul>
+  <li><tt>ps3/answers/problem1.txt</tt></li>
+  <li><tt>ps3/answers/problem2.txt</tt></li>
+  <li><tt>ps3/answers/problem3.txt</tt></li>
+  <li><tt>ps3/answers/problem4.txt</tt></li>
+  <li><tt>ps3/answers/problem6.txt</tt></li>
+  <li><tt>ps3/answers/problem7.txt</tt></li>
+  <li><tt>ps3/answers/problem9.txt</tt></li>
+  <li><tt>ps3/answers/problem10.txt</tt></li>
+  <li><tt>ps3/answers/reflection.txt</tt></li>
+  <li><tt>ps3/answers/collaboration.txt</tt></li>
+  <li><tt>ps3/graph/Graph.java </tt></li>
+  <li><tt>ps3/graph/PathFinder.java</tt></li>
+  <li><tt>ps3/graph/*.java</tt> <i>[other Java classes you may have created]</i></li>
+  <li><tt>ps3/test/p3*.test</tt></li>
+  <li><tt>ps3/test/p3*.expected</tt></li>
+  <li><tt>ps3/test/p7*.test</tt></li>
+  <li><tt>ps3/test/p7*.expected</tt></li>
+  <li><tt>ps3/test/*Test.java</tt> <i>[other JUnit test classes you may have created]</i></li>
+</ul>
+
+<h2><a name="Introduction">Introduction</a></h2>
+
+<p>
+To review, Problem Sets 2, 3, 4, and 6 address different aspects of the design,
+implementation, documentation, and testing of Husky Maps, a <a
+href="http://maps.google.com">Google Maps</a>-like system for giving
+directions between locations in Seattle.
+</p>
+
+<p>
+In Problem Set 2, you built basic data abstractions such as <tt>Route</tt>,
+<tt>GeoFeature</tt>, <tt>GeoPoint</tt> and <tt>GeoSegment</tt>.
+Problem set 3 involves building a graph abstraction and implementing
+a shortest path algorithm.
+</p>
+
+<p>
+In order to give useful directions, the Husky Maps system needs a means of
+finding the shortest path between two points.  Husky Maps requires
+abstractions to represent information about streets, the connectivity
+between streets, and possible paths of travel.  While the next problem set (ps4)
+will deal with creating data structures to represent the streets
+themselves, this problem set will focus on developing the ability to find
+the shortest path between two points.
+</p>
+
+<p>
+To do so, Husky Maps will need a graph abstraction to represent
+connectivity, a path abstraction to describe the cost of traveling a
+particular course, and a path-finding algorithm to search for the
+shortest possible path.
+</p>
+
+<p>
+While we do not specify the names, method signatures, or specifications of
+your graph or path-finding abstractions, we do provide a specification of
+<a class="api" href="../../api/ps3/graph/Path.html">Path</a> and provide you with
+a file format for your testing driver.  The testing driver will execute a
+script of commands and output results to standard output.
+</p>
+
+<h2><a name="Graphs">Graphs</a></h2>
+
+<p>
+Husky Maps represents street connectivity with a directed graph.
+You will implement a generic graph representation
+which can be used for different purposes, including Husky Maps's.
+</p>
+
+<p>
+A directed graph consists of a set of nodes some of which may be
+connected by edges.  In a directed graph, the edges have direction:
+node B might have an edge to node C, but node C is not necessarily
+connected to node B.  For our purposes there cannot be more than one
+edge from a given node to another given node, but there can be an edge
+from A to B and an edge from B to A.
+</p>
+
+<p align="center">
+<img src="simple-graph.gif" alt="A simple directed graph" /><br />
+A simple directed graph with four nodes.
+</p>
+
+<p>
+The children of node B are the nodes to which there is an edge
+<i>from</i> B.  In the example above the children of B are A and C.
+Similarly, the parents of B are the nodes from which there is an edge
+<i>to</i> B.  In the example above B only has one parent, A.
+</p>
+
+<p>Node-weighted means that the nodes in our graphs will carry some
+cost value with them, representing the amount it costs to pass through
+that node.</p>
+
+<p>
+Conceptually, a graph consists of nodes and of edges that connect the
+nodes.  (In practice an implementation often represents the graph in a
+rather different manner than that, however.)  Often, a node is an object
+of some sort, and the edges are references to other nodes.  However what those
+nodes and edges represent may vary: see <a href="#nodes-represent-streets">Nodes represent streets</a> below.
+If you have any questions regarding the the definition of a graph, you should start by
+looking <a href="http://en.wikipedia.org/wiki/Graph_%28data_structure%29">here</a>,
+then if you still have a question ask one of the TA's.
+</p>
+
+<h3><a name="nodes-represent-streets">Nodes represent streets</a></h3>
+
+<p>
+In Husky Maps's graph representation, <i>streets</i> are nodes and
+<i>connections</i> between streets (intersections) are represented by edges
+between them in the graph.  This has a number of benefits over the
+alternative approach (in which nodes represent intersections and edges
+represent streets); here we list just a few of them.
+</p>
+<ul>
+  <li>
+  An intersection may prohibit left turns (or other connections between its
+  streets).  This can be represented by connecting (making
+  an edge between) only streets that represent legal modes of travel.
+  </li>
+  <li>
+  A common representation for a graph represents nodes by (Java) objects,
+  but represents edges implicitly, for instance by having each node contain
+  a list of other nodes (to which this one has an edge). In such a
+  representation, the nodes can carry information, but the edges cannot.
+  (A graph representation that can store information on the edges is
+  somewhat more complicated.)  So the "streets are nodes" approach gives a
+  convenient place to store street lengths, which will be important later
+  in the Husky Maps project.
+  </li>
+  <li>
+  The goal for path-finding is an address on a street, not an intersection,
+  and it is more customary to search for a given node in a graph than to
+  search for a given edge.
+  </li>
+  <li>
+  Since clients will view and use the Husky Maps graph as an abstract object,
+  once you have implemented the abstraction, your code should be equally
+  easy to write, to read, and to debug, regardless of the underlying
+  abstraction.  Using an abstraction different than the "obvious" one helps
+  to test your abstraction and can lead to better code in the long run.
+  </li>
+</ul>
+
+
+<h2><a name="Part-1-Graph-ADT">Part 1: Graph ADT</a></h2>
+
+<h3><a name="Problem1">Problem 1: Determine Requirements for Graph [3 points]</a></h3>
+
+<p>
+Read the <a href="#Algorithm">path-finder pseudocode</a> and
+<a href="#TestScriptFileFormat">test script file format</a> below and
+list all the operations that the algorithm and test files perform on graphs.
+List these operations in
+<tt>ps3/answers/problem1.txt</tt>.
+</p>
+
+<p>
+In order to implement the path-finding
+algorithm, your graph must support at least these operations.  However,
+there may be no motivation for it to support more than that; for this
+problem set (and in general!), it is better to design a minimal than a
+maximal API.
+In the real world, you can always add methods later (though in some cases
+clients may be unhappy if obvious ones are not provided).  However, you can
+never remove them from a published API, and such methods may over-constrain
+the implementation in the future.
+</p>
+
+
+<h3><a name="Problem2">Problem 2: Write a Specification for Graph [12 points]</a></h3>
+
+<p>Design an abstract data type representing a directed, node-weighted
+graph. You should begin by considering what sorts of methods and
+operations you feel you should include in your graph abstraction (see
+the <a href="#Hints">hints</a> section).
+Start from the list of requirements that you created in
+<a href="#Problem1">problem 1</a>.
+<!--
+You can also find suggestions on how to go
+about choosing operations for your abstract data type in the Liskov
+text in sections 5.1 and 5.1.1 (pp. 79-83).
+-->
+(Your graph specification should <em>not</em> ape the <a
+href="#TestScriptFileFormat">test script file format</a>, which is intended
+for a different purpose.  For example, if your specification of graphs
+includes a name for the graph, then there is something wrong with your
+design.)
+</p>
+
+<p>Write a specification for each method you decide to support using
+the format and notation we have been using in CSE 331 (in particular,
+remember to include requires/effects/modifies clauses in your
+Javadocs).
+You can write this anywhere; you will eventually copy it into a file called
+<tt>Graph.java</tt>.
+If you are in doubt about how to write and generate
+Javadocs, refer to the CSE 331 <a
+href="../../conceptual-info/specifications.html">
+Class and Method Specifications</a>.
+After finishing your specification, it is good
+practice to write <i>empty</i> implementations of all operations you
+decide to support (also called <i>stubs</i>), so that you can write
+client code and tests for your Graph before you actually implement
+it.</p>
+
+<p> Now, create a skeleton implementation in a <tt>Graph.java</tt> file.
+Include good comments from your specification, including appropriate javadoc
+tags such as <tt>@requires</tt> or <tt>@modifies</tt>.  To create a skeleton
+implementation, make the body throw an exception, as you have seen in files
+that the staff provided you in past problem sets.
+(Alternately, you can return dummy values (such as null or 0.0)
+from methods that have a non-void return type, but that is possible to
+forget.)  The skeleton implementation
+will compile, but will not pass tests.
+</p>
+
+<p>To allow for a general purpose abstraction, any cost (weight)
+information should be stored directly in the object associated with
+each node. That is, the Graph itself should <em>not</em>, for example,
+store a separate map of cost values for its nodes. Note that <em>edge
+</em>weights are not necessarily easy to support here, but we are
+designing our abstraction with a node-weighted graph in mind, and
+future problem set will only require node weight
+functionality.  (<a href="#nodes-represent-streets">Remember</a>, nodes correspond to
+streets, and edges to intersections.)
+Nonetheless, if, for whatever reason, you want to
+support edge costs, keep in mind that you might need to modify the <a
+href="#Algorithm">shortest paths algorithm</a> later in this problem
+set, as it was written for a node-weighted graph.</p>
+
+<p>Furthermore, the Graph abstraction should not assume that node
+objects are of any particular runtime type. In fact, your Graph data
+type's operations should be valid on nodes of any type, including
+<tt>Object</tt>; you should use Java's generic type system to
+accomplish this goal.</p>
+
+<p>
+Please include in your turnin a brief description (one to two
+sentences for each operation) of why you included the operations you
+did and why you feel they are a sufficient interface to a graph.  This
+should be placed in <tt>ps3/answers/problem2.txt</tt>.</p>
+
+<p>
+Hint:  We recommend that you <em>not</em> specify a stronger
+<tt>equals</tt> method than the one defined in <tt>Object</tt> (which tests
+object identity); neither this problem set nor any future one will require
+you to compare graphs to each other.
+</p>
+
+
+<h3><a name="Problem3">Problem 3: Write Tests for Graph [10 points]</a></h3>
+
+<p>Write a black-box test suite for your Graph
+specifications. Although some initial test cases are provided, you
+will have to write your own test cases. Do not
+attempt to run your tests until you have completed <a
+href="#Problem4">Problem 4</a>. </p>
+
+<p>
+As in previous problem sets, you will write JUnit unit tests
+for the methods of your <tt>Graph</tt> class.  You should write
+your unit tests in one or more JUnit test classes and add them
+to <tt>test/ImplementationTests.java</tt> (because they are based
+on your implementation, not on a staff-provided specification).
+</p>
+
+<p>
+In addition to JUnit tests, you will construct additional test cases
+in the format specified in the <a href="#TestScriptFileFormat">Test
+Script File Format section</a>. Each test case should consist of a
+&quot;test&quot; file containing a series of commands, and an
+&quot;expected&quot; file containing the output that the commands
+should produce.  The file names should start with &quot;p3&quot; and
+have the same base name but end with &quot;.test&quot; and
+&quot;.expected&quot; respectively.  For example, you may have a
+command file named &quot;p3TestAdd.test&quot; with expected output in
+&quot;p3TestAdd.expected&quot;.  Your test file names should be
+informative, and the tests should have comments that make the purpose
+of each test clear.  These files must be in the <tt>test</tt>
+directory alongside <tt>ScriptFileTests.java</tt>.  When you
+run <a class="src"
+href="ps3/test/ScriptFileTests.html">ScriptFileTests</a>
+(which is also run by <a class="src"
+href="ps3/test/SpecificationTests.html">SpecificationTests</a>),
+it will find all of the test files in that directory and run them,
+saving their output as &quot;p3TestAdd.actual&quot; (for example).  It
+then compares the actual file to the expected file and fails if they
+are different.  (Hint for Eclipse users: the <tt>actual</tt> file may
+not show up in the PackageExplorer until you relaunch Eclipse or
+select Refresh (F5).)</p>
+
+<p>It is important to check every aspect of the output files to make sure
+that you tests are running correctly.  This includes whitespace.
+</p>
+
+<p>
+Include with your test cases a few paragraphs of documentation
+explaining your testing strategy.  Place this writeup in
+<tt>ps3/answers/problem3.txt</tt>.
+Remember, any tests you add to <tt>SpecificationTests</tt> should satisfy
+the staff-provided specification; in other words, they must be valid
+tests for any other student's implementation for this problem set.  Any
+other tests should go in <tt>ImplementationTests</tt>.  This implies that
+unit tests for methods that are specific to your implementation, even if
+you have declared those methods to be public and have written Javadoc specifications for them,
+should go in <tt>ImplementationTests</tt>.
+</p>
+
+<p>For turnin,
+you are required to commit your updated versions of the provided test classes and
+any new JUnit test classes you may have added (and call from either
+<tt>ImplementationTests</tt> or <tt>SpecificationTests</tt>),
+along with the <tt>.test</tt> and<tt>.expected</tt> files.</p>
+
+<h3><a name="Problem4">Problem 4: Implement Graph [15 points]</a></h3>
+
+<ol>
+<li>Provide an implementation of your directed graph data type. We ask
+that you strive first for a good design before worrying about
+performance. Nonetheless, keep in mind that eventually your
+path-finding application will create and operate on very large sized
+graphs, so the scalability of your Graph implementation will be
+important. Since the path-finding algorithm must frequently look up
+the children for a given node, this operation should be performed
+quickly even for large graph sizes (aim for constant time here). Your
+graph building operations should also be reasonably efficient. As your
+implementation will likely use classes in the Java Collections
+Framework, you should understand the computational complexity of
+classes such as <a class="api"
+href="http://java.sun.com/javase/6/docs/api/java/util/HashMap.html">HashMap</a>
+and <a class="api"
+href="http://java.sun.com/javase/6/docs/api/java/util/ArrayList.html">ArrayList</a>.</li>
+
+<li>In a few paragraphs, briefly describe your representation and
+explain why you chose it. Compare it to at least one other
+representation that you considered. You should place this discussion
+in a file called <tt>ps3/answers/problem4.txt</tt>.</li>
+
+<li>Place a proper <b>abstraction function and representation invariant</b>
+of your Graph data type (as well as any other ADTs that you may create
+along the way) in your source code. At this point, you should
+also implement a private <tt>checkRep()</tt> method. This will help in
+finding errors in your implementation.</li>
+
+<li>Once you've finished your implementation, you should think
+about whether or not new tests are needed in addition
+to those you wrote before you started coding.  If so, you should
+add these tests to either <tt>SpecificationTests</tt> or
+<tt>ImplementationTests</tt>, depending on whether or not you are testing
+things guaranteed by <i>our</i> specification.
+You should <b>append to your test strategy writeup</b> in
+<a href="#Problem3">Problem 3</a> a description of any
+new tests you added, or why you feel that your original tests
+alone are sufficient.
+</li>
+</ol>
+
+<h3><a name="Problem5">Problem 5: Write a Test Driver for Graph [4 points]</a></h3>
+
+<p>The testing driver <a class="src"
+href="ps3/test/PS3TestDriver.html">PS3TestDriver</a> should read input
+from standard input or a specified file using the format described
+under the <a href="#TestScriptFileFormat">Test Script File Format section</a> and
+print its results to standard output. In order to help you parse the
+input file format, we have provided a skeleton implementation of the
+parser. You should fill in this file with your own code. Please be
+sure to use the <tt>PrintWriter</tt> stored in the <tt>output</tt> field in the tester
+to print the desired output.</p>
+
+<!--
+<p><a href="../../labs/lab3/lab3.html">[TODO: fix link]Lab 3</a>
+contains a quick tutorial on using I/O streams for reading and writing
+to files and prompting the user for input from the command line. The
+first three exercises cover everything you will need to know about I/O
+for this problem set.</p>
+-->
+
+<h2><a name="Path">Path</a></h2>
+
+<p>When searching for the best means of travel between two points,
+Husky Maps will attempt to minimize the distance traveled.  A generic
+shortest path algorithm, on the other hand, attempts to minimize some
+arbitrary cost function of the route traveled.  Since the Graph
+abstraction is generic and can support any type of node, you need an
+abstraction to represent the cost of some path through the graph.  The
+<a class="api" href="../../api/ps3/graph/Path.html">Path</a> interface
+provides an abstraction for both representing a given path and for
+obtaining the cost of that path.
+</p>
+
+<p>
+<a class="api" href="../../api/ps3/graph/Path.html">Path</a> is a Java
+interface, not a class: that is, it just specifies a set of required methods,
+cannot be
+directly instantiated, and provides no code to classes which implement
+it.  By separating the notion of a <a class="api"
+href="../../api/ps3/graph/Path.html">Path</a> (through the use of a Java
+interface) from the generic <tt>Graph</tt> abstraction, graphs with
+any types of nodes can be searched on as long as an appropriate
+implementation of the interface is provided.
+</p>
+
+<h2><a name="Finding-Shortest-Paths">Finding Shortest Paths</a></h2>
+<p><em><b>You will not be implementing this algorithm until problem 8.  Do not
+begin implementing it yet!</b></em></p>
+<p>
+Most shortest path algorithms are written for graphs in which the
+weights (costs) are associated with edges; an example is Dijkstra's
+algorithm, which you can find in any algorithms textbook (for
+instance, <i>Introduction to
+Algorithms</i> by Cormen, Leiserson, Rivest, and Stein).
+</p>
+
+<p>
+Since the graphs we are dealing with are node-weighted, we provide a
+shortest path algorithm for you to use which can handle node-weighted
+graphs.  Here is a modified version of Dijkstra's algorithm that finds
+the shortest path from <em>any of a set</em> of nodes <tt>starts</tt> to
+<em>any of a set</em> of nodes <tt>goals</tt> in a
+node-weighted graph.  This algorithm is called a "greedy" algorithm
+because it never needs to recompute or reconsider information.</p>
+
+<p>It is important that your path-finding code works between
+<em>sets</em> of start and destination nodes, as opposed to a single
+start and single destination node. This functionality will be
+necessary in future problem sets.
+</p>
+
+<p><a name="Algorithm">
+The following modified version of Dijkstra's algorithm</a> has been
+written up in a pseudo-code fashion which, while not executable,
+should be easy to read, understand, and translate to Java.  The
+notation <code>[a,b,c]</code> stands for the three-element sequence
+consisting of <code>a</code>, <code>b</code>, and <code>c</code>;
+here, we use it to represent a path. When applied to sequences, "+"
+means concatenation; for instance, <code>[a,b] + [c,d] =
+[a,b,c,d]</code>. If <tt>m</tt> represents a map, then <tt>m(key)</tt>
+represents the value associated to <tt>key</tt> by the <tt>Map m</tt>.
+</p>
+
+<pre>
+    // Return a shortest path from any element of starts to any
+    // element of goals in a node-weighted graph.
+    Algorithm node-weighted-shortest-path(Set starts, Set goals) {
+
+      // maps nodes -&gt; paths
+      Map paths = { forall start in starts | (start, [start]) }
+
+      // The priority queue contains nodes with priority equal to the cost
+      // of the shortest path to reach that node.  Initially it contains
+      // the start nodes.
+      PriorityQueue active = starts
+
+      // The set of finished nodes are those for which we know the shortest paths
+      // from starts and whose children we have already examined.
+      Set finished = { }
+
+      while active is non-empty do {
+        // queueMin is the element of active with shortest path
+        queueMin = active.extractMin()
+        queueMinPath = paths(queueMin)
+
+        if (queueMin in goals) {
+            return queueMinPath
+        }
+
+        // iterate over edges (queueMin, c) in queueMin.edges
+        for each child c of queueMin {
+          cpath = queueMinPath + [c]
+
+          if (c not in finished) and (c not in active) {
+            paths(c) = cpath
+            insert c in active with priority equal to cpath's cost
+          }
+        }
+        insert queueMin in finished
+      }
+      // execution reaches this point only if active becomes empty
+      return No Path Exists
+    }
+</pre>
+
+<p>
+This algorithm uses a <em>priority queue</em>, a collection data
+structure that supports inserting elements and extracting the
+highest-priority element. (we use path costs as priorities, so shorter
+paths have higher priority.) Note that <a class="api"
+href="http://java.sun.com/javase/6/docs/api/java/util/PriorityQueue.html">
+java.util.PriorityQueue</a> does not let you input the priority of its
+elements. Instead, it either uses the natural order of its elements or
+a <a class="api"
+href="http://java.sun.com/javase/6/docs/api/java/util/Comparator.html">
+java.util.Comparator</a> to decide which elements are on top of the
+queue. Thus, you will either have to implement a wrapper class for
+your nodes that can be also hold the length of the shortest path, or
+you may decide to insert paths, instead of nodes, in the priority
+queue.
+</p>
+
+<h3><a name="Explanation-of-the-algorithm">Explanation of the algorithm</a></h3>
+
+<p>The algorithm keeps track of two disjoint collections of nodes.  One
+collection contains "finished" nodes for which we know the shortest path
+from <tt>starts</tt>, and we have already examined all edges that leave the
+node.  The other set contains "active" nodes for which we know the shortest
+path from <tt>starts</tt>, but we have not yet considered paths that extend
+it.  The paths map associates each active node with the shortest path from
+<tt>starts</tt> to that node.
+</p>
+
+<p>
+A key property of this algorithm is that if <i>x</i> is a finished
+node, and <i>y</i> is not a finished node (either it is active, or we
+don't know the shortest path yet), then the length of the shortest
+path from <tt>starts</tt> to <i>x</i> is no more than the length of the
+shortest path from <tt>starts</tt> to <i>y</i>.
+</p>
+
+<p>
+The algorithm starts with a set of active nodes <i>starts</i>, each
+element of which is associated with a path consisting of just that
+node.  When any of the nodes contained in <i>goals</i> is reached, the
+algorithm terminates and returns the associated path with that element
+in <i>goals</i>.
+</p>
+
+<p>
+The basic step of the algorithm (which is repeated over and over) is
+to find, in the set of active nodes, the one for which the associated
+shortest path has lowest total weight.  Call this node <i>queueMin</i>.  Now
+consider every edge that leaves <i>queueMin</i>; say that edge goes to the child
+<i>c</i>.  If <i>c</i> is finished or active, ignore the (<i>queueMin</i>,
+<i>c</i>) edge, because we already know of a shorter path to <i>c</i>
+than the one that goes through <i>queueMin</i>.  Otherwise, add
+<i>c</i> to the collection of active nodes, and associate with it the
+path <i>cpath</i> which extends the path associated to <i>queueMin</i>
+by adding <i>c</i> at the end.  <i>cpath</i> is the shortest path from
+<tt>starts</tt> to <i>c</i>.  After all the edges leaving
+<i>queueMin</i> have been examined, move <i>queueMin</i> from the
+active collection to the finished collection.
+</p>
+
+<h3><a name="Shortest-path-example">Shortest path example</a></h3>
+
+<p>
+Consider the following graph:
+</p>
+
+<p align="center">
+<img border="0" src="small.gif" alt="Small example graph" />
+</p>
+
+<p>
+The nodes a, b, c, d, and e have weights 2, 1, 3, 1, and 4, respectively.
+We want to find the shortest path from a to e.
+</p>
+
+<p>Initially:</p>
+<blockquote>
+paths = { (a, [a]) }<br />
+active = { a }<br />
+finished = { }<br />
+</blockquote>
+
+<table class="stepbystep">
+<tr>
+<td>
+Remove a from <i>active</i>; its path has cost 2.<br />
+Consider each neighbor of a:<br />
+&nbsp;&nbsp;  add b to <i>active</i><br />
+&nbsp;&nbsp;  set paths(b) = [a,b]<br />
+&nbsp;&nbsp;  add c to <i>active</i><br />
+&nbsp;&nbsp;  set paths(c) = [a,c]<br />
+Add a to <i>finished</i>.
+</td>
+
+<td>
+Now:<br />
+&nbsp;&nbsp;  paths = { (a, [a]), (b, [a,b]), (c, [a,c]) }<br />
+&nbsp;&nbsp;  active = { b, c }<br />
+&nbsp;&nbsp;  finished = { a }<br />
+</td>
+</tr>
+
+<tr>
+<td>
+Remove b from <i>active</i>; its path has cost 3, <br />
+which is the lowest in <i>active</i>.<br />
+Consider each neighbor of b:<br />
+&nbsp;&nbsp;  do not add c to <i>active</i>, as c already appears in <i>active</i><br />
+&nbsp;&nbsp;  add d to <i>active</i><br />
+&nbsp;&nbsp;  set paths(d) = [a,b,d]<br />
+Add b to <i>finished</i>.
+</td>
+
+<td>
+Now:<br />
+&nbsp;&nbsp;  paths = { (a, [a]), (b, [a,b]), (c, [a,c]), (d, [a,b,d]) }<br />
+&nbsp;&nbsp;  active = { c, d }<br />
+&nbsp;&nbsp;  finished = { a, b }<br />
+</td>
+</tr>
+
+<tr>
+<td>
+Remove d from <i>active</i>; its path has cost 4, <br />
+which is the lowest in <i>active</i>.<br />
+Consider neighbor of d:<br />
+&nbsp;&nbsp;  add e to <i>active</i><br />
+&nbsp;&nbsp;  set paths(e) = [a,b,d,e]<br />
+Add d to <i>finished</i>.
+</td>
+
+<td>
+Now:<br />
+&nbsp;&nbsp;  paths = { (a, [a]), (b, [a,b]), (c, [a,c]), (d, [a,b,d]), (e, [a,b,d,e]) }<br />
+&nbsp;&nbsp;  active = { c, e }<br />
+&nbsp;&nbsp;  finished = { a, b, d }<br />
+</td>
+</tr>
+
+<tr>
+<td>
+Remove c from active; its path has cost 5, <br />
+which is the lowest in <i>active</i>.<br />
+Consider neighbor of c:<br />
+&nbsp;&nbsp;  d in <i>finished</i>, e in <i>active</i>, so don't add neighbors<br />
+Add c to <i>finished</i>.
+</td>
+
+<td>
+Now:<br />
+&nbsp;&nbsp;  paths = { (a, [a]), (b, [a,b]), (c, [a,c]), (d, [a,b,d]), (e, [a,b,d,e]) }<br />
+&nbsp;&nbsp;  active = { e }<br />
+&nbsp;&nbsp;  finished = { a, b, d, c }<br />
+</td>
+</tr>
+
+<tr>
+<td>
+Remove e from <i>active</i>; its path has cost 8, <br />
+which is the lowest in <i>active</i>.<br />
+&nbsp;&nbsp;  e is in <i>goals</i>, so we return its path [a,b,d,e] <br />
+</td>
+
+<td>
+DONE :<br />
+&nbsp;&nbsp;  paths = { (a, [a]), (b, [a,b]), (c, [a,c]), (d, [a,b,d]), (e, [a,b,d,e]) }<br />
+&nbsp;&nbsp;  active = {  }<br />
+&nbsp;&nbsp;  finished = { a, b, d, c }  <i> e would have been added but we return </i><br />
+</td>
+</tr>
+</table>
+
+<p>
+Notice that the algorithm actually calculates the shortest route from node
+a to <b>all</b> other nodes until it reaches a goal node. This information
+is stored in the paths structure.
+</p>
+
+<p>
+The algorithm shown is capable of
+finding all the shortest paths given multiple start nodes and
+multiple destinations.
+Husky Maps uses this capability because different directions of a street are
+represented as different nodes.
+</p>
+
+
+<h2><a name="Part-2-PathFinder">Part 2: PathFinder</a></h2>
+
+<h3><a name="Problem6">Problem 6: Understanding the Shortest Path Algorithm [4 points]</a></h3>
+
+<p>Please respond to the following questions regarding the algorithm
+presented above. Place your answers in <tt>ps3/answers/problem6.txt</tt>.</p>
+
+
+  <p>Question 1: In the priority queue <i>active</i>, an element node
+  <em>x</em>'s priority is the cost of the shortest path to
+  <em>x</em>. Suppose the algorithm instead uses node <em>x</em>'s
+  cost as its priority. Explain in a paragraph why this is
+  incorrect. In addition, give an example of a node-weighted graph for
+  which the modified algorithm gives a wrong result.  </p>
+
+<p>Question 2: A typical implementation of edge-weighted shortest path finding
+   looks like this:</p>
+
+<pre>
+    // Return a shortest path from any element of starts to any
+    // element of goals in an edge-weighted graph.
+    // THIS IS NOT THE ALGORITHM YOU NEED TO IMPLEMENT; you
+    // should implement the node-weighted version.
+    Algorithm edge-weighted-shortest-path(Set starts, Set goals) {
+
+      // maps nodes -&gt; paths
+      Map paths = { forall start in starts | (start, [start]) }
+
+      // The priority queue contains nodes with priority equal to the cost
+      // of the shortest path to reach that node.  Initially it contains
+      // the start nodes.
+      PriorityQueue active = { forall start in starts : start with cost 0 }
+
+      // The set of finished nodes are those for which we know the shortest paths
+      // from starts and whose children we have already examined.
+      Set finished = { }
+
+      while active is non-empty do {
+        // queueMin is the element of active with shortest path
+        queueMin = active.extractMin()
+        queueMinPath = paths(queueMin)
+
+        if (queueMin in goals) {
+            return queueMinPath
+        }
+
+        // iterate over edges (queueMin, c) in queueMin.edges
+        for each child c of queueMin {
+          cpath = queueMinPath + [c]
+
+          if ((c not in finished) and
+               <b>((c not in active) or (cost of cpath < cost of paths(c)))</b>) {
+            paths(c) = cpath
+            insert c in active with priority equal to cpath's cost
+             (if it is already in active, just decrease its priority)
+          }
+        }
+        insert queueMin in finished
+      }
+      // execution reaches this point only if active becomes empty
+      return No Path Exists
+    }
+</pre>
+
+<p>The major difference between the algorithms is that the
+edge-weighted version is the condition in bold above: even
+if <tt>c</tt> is already in <tt>active</tt>, this version of the
+algorithm may have to adjust its cost.  Why is this line unnecessary
+in the node-weighted version?</p>
+
+<h3><a name="Problem7">Problem 7: Write Tests for Shortest Path Algorithm [10 points]</a></h3>
+
+<p>The testing framework used to test <tt>Graph</tt> is also used to
+test <tt>PathFinder</tt>.  Extend the testing framework to support the
+<a href="#CommandFindPath">FindPath command</a>.  In order to test the
+functionality of PathFinder, you should create a set of test cases,
+similar to what you did in Problem 3, in files called
+<tt>p7<em>[any]</em>.test</tt> and provide their expected output in
+<tt>p7<em>[any]</em>.expected</tt>, where <tt><em>[any]</em></tt> is
+any string.  Also include an explanation of your testing strategy.
+Place this writeup in <tt>ps3/answers/problem7.txt</tt>.
+</p>
+<p>
+Depending on your specification, you may or may not feel that the
+staff-provided file format sufficiently tests your path finder's functionality.
+Hence, feel free to include additional JUnit tests (adding them
+to <tt>ImplementationTests</tt>) that test the specifics of your
+implementation and include in your writeup why you did or did not find them necessary.
+</p>
+
+<h3><a name="Problem8">Problem 8: Implement Shortest Path Algorithm [14 points]</a></h3>
+
+<p>Implement the modified version of Dijkstra's shortest path
+algorithm described above, and place your source code in a class named
+<tt>ps3.graph.PathFinder</tt>. You should also include specifications
+for any public or protected methods defined in <tt>PathFinder</tt>.</p>
+
+<p>As mentioned previously, your path finder abstraction should
+support searching Graphs with arbitrary node types. Therefore, it
+should obtain a cost metric through the <a class="api"
+href="../../api/ps3/graph/Path.html">Path</a> interface, as opposed to
+querying the nodes directly.  In order to keep your PathFinder
+implementation from being dependent on a particular node type you may
+find it useful to pass in source <a class="api"
+href="../../api/ps3/graph/Path.html">Path</a>s rather than source
+nodes. </p>
+
+<p>Please note that you are required to implement a version of
+Dijkstra's algorithm that is capable of finding the shortest path between a
+<i>set</i> of starting nodes and a <i>set</i> of ending nodes. An
+implementation that can only find the shortest path from one single
+node to another will not be sufficient for your Husky Maps system. </p>
+
+<p>As with <tt>Graph</tt>, after your implementation of <tt>PathFinder</tt>,
+you should think about whether or not your code needs additional tests,
+and <b>append a discussion of this to your testing strategy writeup</b> from
+<a href="#Problem7">Problem 7</a> above.  Any new tests that you construct
+should be appropriately added to one of the test suites
+<tt>ImplementationTests</tt> or <tt>SpecificationTests</tt>.
+</p>
+
+<p>We recommend that your <tt>PathFinder</tt> uses generics so that any
+given <tt>PathFinder</tt> object is specialized to a specific type of node
+and path.  Your declaration should begin with <tt>public class PathFinder&lt;N,
+P extends Path&lt;N, P&gt; &gt; {</tt>.</p>
+
+<p>(Hint: you may find it difficult to implement the part of the
+algorithm near the beginning where you need to make
+length-1 <tt>Path</tt>s from the given starting nodes.
+Because <tt>Path</tt> is an interface, you can't just write <tt>new
+Path&lt;N,P&gt;(startNode)</tt>.  We recommend researching the Factory
+Pattern for one way to resolve this issue.)</p>
+
+<h3><a name="Problem9">Problem 9: WeightedNodePath Representation [3 points]</a></h3>
+
+<p>Look at the implementation of <a class="src"
+href="ps3/graph/WeightedNodePath.html">WeightedNodePath</a>.  In a file
+named <tt>ps3/answers/problem9.txt</tt>, describe in a couple of
+paragraphs why one might prefer the representation that was chosen
+over possible alternatives.  You should describe at least one
+alternate representation.  You should consider the representation
+within the context of its expected use in PathFinder.</p>
+
+<h3><a name="Tools">Problem 10: Tools [2 points]</a></h3>
+
+<p>Did you use Daikon on this problem set?  Create a file called
+<tt>problem10.txt</tt> in your answers directory and briefly give a
+<em>specific</em> reason that you chose to use it, or not to use it.
+</p>
+
+
+<h3><a name="reflection">Reflection [1 point]</a></h3>
+
+<p>Please answer the following questions in a file named <tt>reflection.txt</tt> in your
+<tt>answers/</tt> directory.</p>
+<ol>
+  <li>How many hours did you spend on each problem of this problem set?
+      (Only include time when you are completely focused on CSE 331.  For
+      example, if you worked an hour in your noisy dorm lounge, or you were
+      periodically reading email or IMs, don't count that hour.)
+  </li>
+  <li>In retrospect, what could you have done better to reduce the time you
+  spent solving this problem set?</li>
+  <li>What could the CSE 331 staff have done better to improve your learning experience
+  in this problem set?</li>
+  <li>What do you know now that you wish you had known before beginning the
+  problem set?</li>
+</ol>
+
+
+<h3><a name="collaboration">Collaboration [1 point]</a></h3>
+<p>Please answer the following questions in a file named <tt>collaboration.txt</tt> in your
+<tt>answers/</tt> directory.</p>
+<p>
+The standard <a
+href="http://www.cs.washington.edu/education/courses/331/CurrentQtr/admin-info/generalinfo.html#Collaborative-work">collaboration
+policy</a> applies to this problem set.
+</p>
+<p>
+State whether or not you collaborated with other students.
+If you did collaborate with other students, put their names and a brief
+description of how you collaborated.
+</p>
+
+
+
+<h2><a name="Returnin">Returnin [25 points]</a></h2>
+
+<p>After you receive your corrected problem set back from your TA, you
+will need to resubmit a corrected version of the code. You will have
+until Friday, February 11 at 8pm to returnin your code. The returnin
+script will be enabled a week earlier, at 8pm, February 4.</p>
+
+<p>You will only receive credit if you pass all the tests, and you have a
+fixed number of trials without penalty.  See the
+<a href="../../tools/turnin.html#returnin331">returnin331</a> documentation
+for details.
+</p>
+
+<h2><a name="TestScriptFileFormat">Test script file format</a></h2>
+
+<p>Because you and your classmates will have different specifications
+for the classes in this problem set, it is important that there is
+a standardized interface to use, and test, your code.  To that end,
+we specify a text-based scripting format used to write instructions
+that will be executed by your graph and path finder.
+</p>
+<p>The testing script is a simple text file with one command listed per
+line.  Each line consists of words separated by white space.  The first
+word on each line is a command name.  The remaining words are arguments to
+the command and have an interpretation which is dependent on the particular
+command they follow.  Lines that have a hash (#) as their first character
+are considered comment lines and should be echoed to the output when
+running the test script.  Lines that are blank should cause a blank line
+to be printed to the output.
+</p>
+
+<p>The testing script manipulates graphs of <a class="api"
+href="../../api/ps3/graph/WeightedNode.html">WeightedNode</a> elements.
+Each <a class="api"
+href="../../api/ps3/graph/WeightedNode.html">WeightedNode</a> has a name
+and a cost.  After a <tt>WeightedNode</tt> is created, it can be
+referred to later on in the testing file by using its name. We have
+also provided a <a class="api"
+href="../../api/ps3/graph/WeightedNodePath.html">WeightedNodePath</a>
+which implements the <a class="api"
+href="../../api/ps3/graph/Path.html">Path</a> interface for sequences of
+<a class="api"
+href="../../api/ps3/graph/WeightedNode.html">WeightedNode</a>s.  When
+the testing driver outputs a node, it should do so by displaying that
+node's name, which is a <tt>String</tt>.  The name for each
+<tt>Graph</tt> is also a <tt>String</tt>.  The testing driver must
+manage the mapping of names to graphs in addition to the mappings from
+names to nodes.  This can be accomplished by maintaining two <a
+class="api"
+href="http://java.sun.com/javase/6/docs/api/java/util/HashMap.html">HashMap</a>s
+in the testing driver code.  The first <tt>HashMap</tt> could map
+names (<tt>String</tt>s) to <tt>Graph</tt>s and the second could be used to
+map names to <a class="api"
+href="../../api/ps3/graph/WeightedNode.html">WeightedNode</a>s. To
+simplify the parsing of the file, names of nodes and graphs must
+contain only alphanumeric characters.
+</p>
+
+<p>
+The following is a list of the valid commands, and the meaning of their
+arguments.  Each command has an associated output which should be printed
+to standard output (typically, the console) when the command is executed.
+</p>
+
+<dl class="commands">
+<dt>CreateGraph <i>graphName</i></dt>
+<dd>
+Creates a new graph which shall be named
+<i>graphName</i>.  The graph is initially empty (has no nodes
+and no edges).  The command's output is:
+<pre>created graph <i>graphName</i></pre>
+If the graph already exists, the output of this command is not defined.
+</dd>
+
+<dt>CreateNode <i>nodeName</i> <i>cost</i></dt>
+<dd>
+Creates a new node named by the string <i>nodeName</i> with the cost
+specified by the non-negative integer <i>cost</i>.  You can refer to the
+node by name after you have created it using this command.
+The command's output is:
+<pre>created node <i>nodeName</i> with cost <i>cost</i></pre>
+If the node already exists, the output of this command is not defined.
+</dd>
+
+<dt>AddNode <i>graphName</i> <i>nodeName</i></dt>
+<dd>Adds a node represented by the string <i>nodeName</i> to the graph named
+<i>graphName</i>.  The command's output is:
+<pre>added node <i>nodeName</i> to <i>graphName</i></pre>
+If the node is already in the graph, the output of this command is not defined.
+</dd>
+
+<dt>AddEdge <i>graphName</i> <i>parentNode</i> <i>childNode</i></dt>
+<dd>Creates an edge in graph <i>graphName</i> from
+<i>parentNode</i> to <i>childNode</i>.
+The command's output is:
+<pre>added edge from <i>parentNode</i> to <i>childNode</i> in <i>graphNode</i></pre>
+If the edge already exists, the output of this command is not defined.
+</dd>
+
+<dt>ListNodes <i>graphName</i></dt>
+<dd>This command has no effect on the graph.  Its output starts with:
+<pre><i>graphName</i> contains:</pre>
+and is followed, on the same line, by a space-separated list of the names
+of all nodes in the graph.  The nodes should appear in
+alphabetical order.  There is a single space between the colon and the
+first node name.
+</dd>
+
+<dt>ListChildren <i>graphName</i> <i>parentNode</i></dt>
+<dd>This command has no effect on the graph.  Its output starts with:
+<pre>the children of <i>parentNode</i> in <i>graphName</i> are: </pre>
+and is followed, on the same line, by a space-separated list of the names
+of nodes to which there is an edge from <i>parentNode</i>.  The nodes
+should appear in alphabetical order.  There is a single space between the
+colon and the first node name.
+</dd>
+
+<dt><a name="CommandFindPath">
+FindPath <i>graphName</i> <i>from1</i> [<i>from2</i> [<i>from3</i> ... ] ] -&gt; <i>to1</i> [ <i>to2</i> [ <i>to3</i> ... ] ]
+</a></dt>
+<dd>
+The -&gt; symbol is separated from node names by whitespace on both sides.
+<p>
+The square brackets indicate optional elements.  The square brackets do not
+appear in the input file, but an arbitrary positive number of from and to
+nodes may be specified.</p>
+<p>This command has no effect on the graph.  It finds and outputs the shortest
+path amongst all of the possible paths from any of the "from" nodes to any of
+the "to" nodes.  The output starts with:</p>
+<pre>shortest path in <i>graphName</i>: </pre>
+<p>and is followed, on the same line, by a space-separated list of nodes in
+the order of traversal from
+<i>fromX</i> to <i>toY</i>.</p>
+<p>If no path exists the output should be:</p>
+<pre>no path found in <i>graphName</i></pre>
+<p>Note that in in the first case, there should be a single space after the colon.</p>
+</dd>
+</dl>
+
+<h3><a name="SampleTest">Sample input and output</a></h3>
+<p>Given the following as input for the testing driver:</p>
+<pre>
+# Problem set 3 test script, from ps3 handout
+
+CreateNode n1 5
+CreateNode n3 1
+CreateGraph A
+AddNode A n1
+CreateNode n2 10
+AddNode A n2
+CreateGraph B
+ListNodes B
+AddNode A n3
+AddEdge A n3 n1
+AddNode B n1
+AddNode B n2
+AddEdge B n2 n1
+AddEdge A n1 n3
+AddEdge A n1 n2
+ListNodes A
+ListChildren A n1
+AddEdge A n3 n3
+ListChildren A n3
+FindPath A n3 -&gt; n2
+</pre>
+
+<p>A correct implementation would output the following:</p>
+<pre>
+# Problem set 3 test script, from ps3 handout
+
+created node n1 with cost 5
+created node n3 with cost 1
+created graph A
+added node n1 to A
+created node n2 with cost 10
+added node n2 to A
+created graph B
+B contains:
+added node n3 to A
+added edge from n3 to n1 in A
+added node n1 to B
+added node n2 to B
+added edge from n2 to n1 in B
+added edge from n1 to n3 in A
+added edge from n1 to n2 in A
+A contains: n1 n2 n3
+the children of n1 in A are: n2 n3
+added edge from n3 to n3 in A
+the children of n3 in A are: n1 n3
+shortest path in A: n3 n1 n2
+</pre>
+
+<p>The behavior of the testing driver on malformed input files is not
+defined; you may assume the input files are well-formed.</p>
+
+<p>Since it is possible that your specification throws exceptions for
+certain inputs, the testing file format provides for one additional
+feature.  If the command in the input file results in an exception,
+the command, rather than outputting its normal string, should output
+&quot;<tt>Exception: </tt><i>&lt;toString value of exception&gt;</i>&quot;.  This
+exception-output behavior is already implemented in the
+<tt>executeCommand</tt> method of the provided
+<tt><a class="src" href="ps3/test/PS3TestDriver.html">PS3TestDriver</a></tt> starter file. </p>
+
+<p> In addition, it is possible to have run the PS3TestDriver from the command line.  Once you
+have completed the PS3TestDriver implementation, do a build with ant.  Change directories to the
+root binary directory (that is, in the very base directory of your checkout, there
+will be a <em>bin</em> directory).  Once the bin directory is your current directory
+(on Linux you can check with a <tt>pwd</tt> command, windows is a <tt>dir</tt> command),
+run: </p>
+<p><tt>java ps3.test.PS3TestDriver</tt>.  Then enter in commands, and the console will
+echo the results.  To stop, press the key combination control-d. (This sends an end of file
+character to the console).
+</p>
+
+<h2><a name="Hints">Hints</a></h2>
+
+<p>
+Problem set 3 does not depend on problem set 2 (though problem set 4
+depends on both of them).  If you are behind on problem set 2, don't let
+that stop you from starting problem set 3 (though you will have to work
+very hard to catch up in the class!).
+</p>
+
+
+<h3><a name="WritingSpecs">Writing Specifications</a></h3>
+
+<p>For both your graph class and your path-finding method, follow this
+methodology.  First, write the specification. After writing the spec, write
+test cases based on the spec.  Only after your test cases are complete
+should you begin the implementation.  This will save time in the long
+run.</p>
+
+<p>To give you some sense of the kinds of issues you should be
+considering in your design, here are some questions you might want to
+consider. These don't in general have simple answers. You'll need to
+exercise careful judgment, and think carefully about how decisions you
+make interfere with each other.</p>
+
+<ul>
+  <li>Will the graph be mutable or immutable?</li>
+
+  <li>Will the graph be implemented as a single class, or will there
+  be a separate Java interface for the Graph specification, and a
+  class for the implementation?</li>
+
+  <li>Will edges be objects in their own right? Will they be visible
+  to a client of the abstract type?</li>
+
+  <li>What kind of iterators will the type provide?</li>
+
+  <li>Will the type provide any views, like the set view returned by
+  the <code>entrySet()</code> method of <a class="api"
+  href="http://java.sun.com/javase/6/docs/api/java/util/Map.html">java.util.Map</a>?</li>
+
+  <li>Will the type implement any standard Java collection
+  interfaces?</li>
+
+  <li>Will the type use any standard Java collections in its
+implementation?</li>
+
+</ul>
+
+<p>Make good use of your TA.  If you have concrete questions,
+then take your specification to office hours
+before going to the lab and get some feedback on your design and
+style. This is likely to save you a lot of time!</p>
+
+
+<h3><a name="Working_Incrementally">Working Incrementally</a></h3>
+
+<p>Although it is generally a bad idea to start coding before you have
+thought deeply, it often makes sense to work incrementally,
+interleaving design and coding. Once you have a sketch of your
+specification, you may want to write some experimental code. This
+should give you some concrete feedback on how easy it is to implement
+the methods you've specified. You may even want to start at the end,
+and write the code that uses your type, so that you can be confident
+that the methods you provide will be sufficient.  (This was the point of
+<a href="#Problem1">Problem 1</a>; you should follow this methodology on
+your own in the future, without an explicit problem to force you to do it.)
+</p>
+
+<p>This strategy can backfire and degenerate into mindless hacking,
+leaving you with a pile of low-quality code and an incoherent
+specification. To avoid that, bear three things in mind. First, you
+must be willing to start again: experimental code isn't experimental
+if you're not prepared to throw it away. Second, whenever you start
+coding, you must have a firm idea of what you're trying to
+implement. There's no point starting to code to a specification that
+is vague and missing crucial details. That doesn't mean that your
+specification must be complete and polished, but it does mean that you
+shouldn't start coding a method until at least you have its own
+specification written. Third, you <i>must</i> write down the
+specification of a method and not just imagine it; it's too easy to
+delude yourself. Try to write it on paper and mull it over before you
+start any coding. It's tempting to sit in front of an editor, write
+some specification as comments, and then start coding around them, but
+this tends not to be nearly so effective.</p>
+
+<h3><a name="Designing_Tests">Designing Tests</a></h3>
+
+<p>It can be difficult to come up with a good test suite.  You would
+like to test a variety of &ldquo;interesting&rdquo; graphs, but what
+are interesting graphs?  One possible approach is a &ldquo;0, 1,
+2&rdquo; case analysis: test scripts with 0, 1, and 2 graphs are
+interesting; graphs with 0, 1, and 2 nodes and 0, 1, and 2 edges are
+interesting.  For each method, 0, 1, and 2 parameters and 0, 1, and 2
+results are interesting; for example: getChildren on nodes with 0, 1,
+and 2 children, findPath with 0, 1,and 2 start nodes, 0, 1,and 2 goal
+nodes, and 0, 1,and 2 paths found.  This approach, while certainly not
+required, can give a good way to structure your tests to cover many
+important cases without having too much redundancy.</p>
+
+<h2><a name="q-and-a">Q &amp; A</a></h2>
+
+<p>This section will list clarifications and answers to common
+questions about problem sets.  We'll try to keep it as up-to-date as
+possible, so this should be the first place to look (after carefully
+rereading the problem set handout and the specifications) when you
+have a problem.</p>
+
+<div id="footer">
+</div>
+
+</body>
+</html>
+
+<!--  LocalWords:  GeoFeature GeoPoint GeoSegment WeightedNode HashMap
+ -->
+<!--  LocalWords:  PathFinder WeightedNodePath CreateGraph graphName nodeName
+ -->
+<!--  LocalWords:  CreateNode AddNode AddEdge ListNodes ListChildren parentNode
+ -->
+<!--  LocalWords:  Returnin psets ps java turnin TestAdd writeup TestDriver toY
+ -->
+<!--  LocalWords:  SpecificationTests ImplementationTests ScriptFileTests TODO
+ -->
+<!--  LocalWords:  Cormen Rivest forall PriorityQueue queueMin extractMin cpath
+ -->
+<!--  LocalWords:  queueMinPath cpath's FindPath returnin childNode graphNode
+ -->
+<!--  LocalWords:  fromX executeCommand NodeCost diff changebars mytest XXX CSA
+ -->
+<!--  LocalWords:  vshyeung Exp XHTML NodeTypeFoo pset txt
+ -->
+<!--  LocalWords:  NodeCountingPath
+ -->
