@@ -1,0 +1,25 @@
+public void addNode(Object a)
+	add 'a' to the graph
+	requires 'a' must not be null
+	
+public void addEdge(Object a, Object b)
+	add an directed edge from 'a' to 'b'
+	requires  'a' and 'b' both exist in graph, and must not be null
+	
+public int degree(Object a)
+	return the number of nodes connected with 'a'
+	requires  'a' must not be null
+	
+public boolean isIsolated(Object a)
+	return true if a is isolated,false if not
+	requires 'a' must not be null
+	
+public boolean hasEdge(Object a, Object b)
+	return true if there is an edge from 'a' to 'b'
+	requires 'a' and 'b' must not be null
+	
+public Collection<E> listNodes()
+	list all nodes in the graph
+
+public Collection<E> listChildren(E node)
+	list the children of 'node' 
